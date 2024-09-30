@@ -5,6 +5,19 @@
   text-align: center;
 }
 
+input {
+  height: 40px; /* Set a specific height for uniformity */
+}
+
+.relative {
+  height: 40px; /* Match the input height */
+}
+
+.absolute {
+  top: 50%; /* Center vertically */
+  transform: translateY(-50%); /* Adjust for centering */
+}
+
 .logo {
   height: 6em;
   padding: 1.5em;

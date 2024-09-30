@@ -1,9 +1,9 @@
-import Login from "./components/Login";
+import Navbar from "./components/UI/Navbar";
 
 function App() {
   return (
     <>
-      <Login />
+      <Navbar />
     </>
   );
 }
