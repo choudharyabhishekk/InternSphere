@@ -69,13 +69,13 @@ const Signup = () => {
       isValid = false;
     }
 
-    setErrors(tempErrors); // Set errors to state
+    setErrors(tempErrors);
     return isValid;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setErrorMessage(""); // Clear previous error messages
+    setErrorMessage("");
 
     if (!validateForm()) {
       return; // If validation fails, stop the submission
@@ -93,7 +93,7 @@ const Signup = () => {
       console.log(response.data);
       navigate("/dashboard");
     } catch (error) {
-      setErrorMessage(error.response?.data?.message || "Signup failed"); // Set error message if signup fails
+      setErrorMessage(error.response?.data?.message || "Signup failed");
       console.error(error);
     }
   };

@@ -1,7 +1,8 @@
 import React from "react";
+import { JobCard } from "./JobCard";
 
 function Homepage() {
-  return <div>Homepage</div>;
+  return <></>;
 }
 
 export default Homepage;

@@ -1,15 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { FaEnvelope, FaKey } from "react-icons/fa";
 import { GoogleLogin } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { AuthContext } from "../utils/AuthContext"; // Adjust the import path as needed
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [errors, setErrors] = useState({}); // State for holding validation errors
+  const [errors, setErrors] = useState({});
+  const { setIsLoggedIn } = useContext(AuthContext); // Get setIsLoggedIn from AuthContext
   const navigate = useNavigate();
 
   const togglePasswordVisibility = () => {
@@ -51,20 +55,20 @@ const Login = () => {
         email,
         password,
       });
-
-      const { token } = response.data;
+      const token = response.data.result;
       localStorage.setItem("token", token);
+      toast.success("Login Successful");
       navigate("/dashboard");
     } catch (error) {
       console.error("Login failed:", error);
-      alert("Login failed. Please check your credentials.");
+      toast.error("Login Failed. Please Check your credentials.");
     }
   };
 
   const handleGoogleLogin = (credentialResponse) => {
     const credentialResponseDecoded = jwtDecode(credentialResponse.credential);
     console.log(credentialResponseDecoded);
-    // Add logic
+
     navigate("/dashboard");
   };
 
@@ -97,8 +101,7 @@ const Login = () => {
             />
             {errors.email && (
               <p className="text-red-500 text-sm">{errors.email}</p>
-            )}{" "}
-            {/* Display error */}
+            )}
           </div>
         </div>
         <div className="mb-6">
@@ -122,8 +125,7 @@ const Login = () => {
             />
             {errors.password && (
               <p className="text-red-500 text-sm">{errors.password}</p>
-            )}{" "}
-            {/* Display error */}
+            )}
             <button
               type="button"
               onClick={togglePasswordVisibility}
@@ -151,7 +153,7 @@ const Login = () => {
         </div>
         <button
           type="submit"
-          className="w-full py-2 mb-3 bg-primary text-white rounded-lg hover:bg-primary-dark focus:outline-none"
+          className="w-full py-2 mb-3 bg-primary text-white rounded-full hover:bg-primary-dark focus:outline-none"
         >
           Login
         </button>
