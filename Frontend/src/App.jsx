@@ -25,7 +25,7 @@ function App() {
       {isEmployerRoute ? <EmployerNavbar /> : <Navbar />}
       <Routes>
         <Route path="/job/:jobId" element={<JobDetails />} />
-        <Route path="/" element={<Homepage />} />
+        <Route path="/signup" element={<Homepage />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/hire" element={<EmployerSignup />} />
         <Route path="/profile" element={<UserProfile />} />
