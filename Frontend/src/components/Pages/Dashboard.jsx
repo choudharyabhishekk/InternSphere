@@ -1,9 +1,14 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { JobCard } from "./JobCard";
+import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
+  const [jobs, setJobs] = useState([]); // State for job data
+  const [loading, setLoading] = useState(true); // Loading state
+  const [error, setError] = useState(null); // Error state
+  const navigate = useNavigate();
   // Dummy data
-  const jobs = [
+  const dummyJobs = [
     {
       id: 1,
       title: "Software Developer Intern",
@@ -11,8 +16,8 @@ const Dashboard = () => {
       location: "New York",
       companyName: "Tech Corp",
       datePosted: "2024-09-30",
-      salary: "$20/hour",
-      jobType: "Full-time",
+      hourlyRate: "$20/hour",
+      employmentType: "Full-time",
     },
     {
       id: 2,
@@ -21,8 +26,8 @@ const Dashboard = () => {
       location: "San Francisco",
       companyName: "Data Insights",
       datePosted: "2024-09-28",
-      salary: "$22/hour",
-      jobType: "Part-time",
+      hourlyRate: "$22/hour",
+      employmentType: "Part-time",
     },
     {
       id: 3,
@@ -31,8 +36,8 @@ const Dashboard = () => {
       location: "Remote",
       companyName: "Design Studio",
       datePosted: "2024-09-25",
-      salary: "$18/hour",
-      jobType: "Full-time",
+      hourlyRate: "$18/hour",
+      employmentType: "Full-time",
     },
     {
       id: 4,
@@ -41,8 +46,8 @@ const Dashboard = () => {
       location: "Toronto",
       companyName: "Market Masters",
       datePosted: "2024-09-29",
-      salary: "$19/hour",
-      jobType: "Part-time",
+      hourlyRate: "$19/hour",
+      employmentType: "Part-time",
     },
     {
       id: 5,
@@ -51,8 +56,8 @@ const Dashboard = () => {
       location: "Chicago",
       companyName: "FinTech Solutions",
       datePosted: "2024-09-27",
-      salary: "$21/hour",
-      jobType: "Full-time",
+      hourlyRate: "$21/hour",
+      employmentType: "Full-time",
     },
     {
       id: 6,
@@ -61,15 +66,52 @@ const Dashboard = () => {
       location: "Remote",
       companyName: "People First",
       datePosted: "2024-09-26",
-      salary: "$17/hour",
-      jobType: "Part-time",
+      hourlyRate: "$17/hour",
+      employmentType: "Part-time",
     },
   ];
 
+  useEffect(() => {
+    const fetchJobs = async () => {
+      try {
+        const response = await fetch("http://localhost:3000/jobs");
+        if (!response.ok) {
+          throw new Error("Failed to fetch jobs");
+        }
+        const data = await response.json();
+        console.log(data);
+        // Update jobs state with fetched data or fallback to dummy data
+        setJobs(data.length > 0 ? data : dummyJobs);
+      } catch (error) {
+        setError(error.message);
+        // Fallback to dummy data if there is an error
+        setJobs(dummyJobs);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchJobs();
+  }, []);
+
   const handleSearch = (e) => {
-    return jobs.filter((j) => j.title === e.target.value);
+    const searchValue = e.target.value.toLowerCase();
+    const filteredJobs = dummyJobs.filter((j) =>
+      j.title.toLowerCase().includes(searchValue)
+    );
+    setJobs(filteredJobs); // Update state with filtered jobs
   };
 
+  if (loading) {
+    return <div>Loading...</div>; // Loading state
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>; // Error state
+  }
+  const handleJobClick = (jobId) => {
+    navigate(`/job/${jobId}`); // Navigate to job details page
+  };
   return (
     <div className="max-w-6xl m-auto my-5">
       <h1 className="text-3xl font-bold mb-6">Dashboard</h1>
@@ -83,16 +125,17 @@ const Dashboard = () => {
         />
       </div>
       <div className="job-list grid gap-10 md:grid-cols-3 sm:grid-cols-2">
-        {jobs.map((c, index) => (
+        {jobs.map((c) => (
           <JobCard
-            key={index}
-            company={c.companyName}
+            key={c.id}
+            onClick={() => handleJobClick(c._id)}
+            company="Microsoft"
             datePosted={c.datePosted}
             title={c.title}
             description={c.description}
             location={c.location}
-            salary={c.salary}
-            jobType={c.jobType}
+            hourlyRate={"$" + c.hourlyRate}
+            employmentType={c.employmentType}
           />
         ))}
       </div>

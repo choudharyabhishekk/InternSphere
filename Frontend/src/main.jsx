@@ -5,10 +5,10 @@ import App from "./App.jsx";
 import { BrowserRouter } from "react-router-dom";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { ToastContainer } from "react-toastify";
-import { AuthProvider } from "./components/utils/AuthContext.jsx";
+import { AuthContextProvider } from "./context/AuthContext";
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <AuthProvider>
+    <AuthContextProvider>
       <BrowserRouter>
         <GoogleOAuthProvider
           clientId={import.meta.env.VITE_GOOGLE_AUTH_CLIENT_ID}
@@ -17,6 +17,6 @@ createRoot(document.getElementById("root")).render(
         </GoogleOAuthProvider>
         <ToastContainer theme="dark" position="bottom-right" />
       </BrowserRouter>
-    </AuthProvider>
+    </AuthContextProvider>
   </StrictMode>
 );

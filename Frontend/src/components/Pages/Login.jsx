@@ -6,14 +6,13 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { AuthContext } from "../utils/AuthContext"; // Adjust the import path as needed
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState({});
-  const { setIsLoggedIn } = useContext(AuthContext); // Get setIsLoggedIn from AuthContext
+  // const { setIsLoggedIn } = useContext(AuthContext); // Get setIsLoggedIn from AuthContext
   const navigate = useNavigate();
 
   const togglePasswordVisibility = () => {
@@ -55,6 +54,7 @@ const Login = () => {
         email,
         password,
       });
+
       const token = response.data.result;
       localStorage.setItem("token", token);
       toast.success("Login Successful");

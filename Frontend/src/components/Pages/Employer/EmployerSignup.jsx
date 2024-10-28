@@ -1,19 +1,34 @@
 import React, { useState } from "react";
-import { FaEnvelope, FaKey, FaUser } from "react-icons/fa";
 import { Routes, Route, Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { FaPhone } from "react-icons/fa6";
+import { ToastContainer, toast } from "react-toastify";
+
+import {
+  FaUser,
+  FaEnvelope,
+  FaPhone,
+  FaMapMarkerAlt,
+  FaGlobe,
+  FaIndustry,
+  FaBuilding,
+} from "react-icons/fa";
 
 const EmployerSignup = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [phone, setPhone] = useState("");
+  // const [phone, setPhone] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
+  const [companyName, setCompanyName] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [address, setAddress] = useState("");
+  const [website, setWebsite] = useState("");
+  const [industry, setIndustry] = useState("");
+  const [companySize, setCompanySize] = useState("");
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -42,17 +57,6 @@ const EmployerSignup = () => {
     }
 
     // Validate phone
-    if (!phone) {
-      tempErrors.email = "Mobile number is required";
-      isValid = false;
-    } else if (
-      !/^\+?(\d{1,4}[-.\s]?)?(\(?\d{1,3}\)?[-.\s]?)?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}$/.test(
-        phone
-      )
-    ) {
-      tempErrors.phone = "Phone number is not valid";
-      isValid = false;
-    }
 
     // Validate Password
     if (!password) {
@@ -92,59 +96,58 @@ const EmployerSignup = () => {
     e.preventDefault();
     setErrorMessage("");
 
-    if (!validateForm()) {
-      return; // If validation fails, stop the submission
-    }
-
     try {
-      // Make API request to EmployerSignup
       const response = await axios.post(
-        "http://localhost:3000/auth/EmployerSignup",
+        "http://localhost:3000/employer/registerEmployer",
         {
-          firstname: name.split(" ")[0],
-          lastname: name.split(" ")[1] || "",
           email,
           password,
+          phoneNumber,
+          companyName,
+          address,
+          website,
+          industry,
+          companySize,
         }
       );
-
-      console.log(response.data);
-      navigate("/dashboard");
+      toast.success("Successfully Registered");
+      navigate("/employer/dashboard");
+      setErrorMessage("");
     } catch (error) {
-      setErrorMessage(error.response?.data?.message || "EmployerSignup failed"); // Set error message if EmployerSignup fails
-      console.error(error);
+      setErrorMessage(error.response?.data?.message || "EmployerSignup failed");
+      setSuccessMessage(""); // Clear success message on error
     }
   };
 
   return (
     <div className="flex flex-col mt-20 items-center h-screen">
-      <h1 className="text-2xl font-bold ">Hire a Talent</h1>
+      <h1 className="text-2xl font-bold">Hire a Talent</h1>
       <form
         onSubmit={handleSubmit}
         className="bg-white p-8 rounded-xl shadow-xl w-full max-w-sm"
       >
-        {/* Name Field */}
+        {/* Company Name Field */}
         <div className="mb-6">
           <label
-            htmlFor="name"
+            htmlFor="companyName"
             className="block text-sm font-medium text-gray-700"
           >
-            Name
+            Company Name
           </label>
           <div className="relative mt-1">
-            <FaUser className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" />
+            <FaBuilding className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" />
             <input
-              id="name"
+              id="companyName"
               type="text"
-              placeholder="Your Name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
+              placeholder="Company Name"
+              value={companyName}
+              onChange={(e) => setCompanyName(e.target.value)}
               className={`block w-full pl-10 py-2 border rounded-lg focus:ring-primary focus:border-primary bg-gray-50 ${
-                errors.name ? "border-red-500" : "border-gray-300"
+                errors.companyName ? "border-red-500" : "border-gray-300"
               }`}
             />
-            {errors.name && (
-              <p className="text-red-500 text-sm">{errors.name}</p>
+            {errors.companyName && (
+              <p className="text-red-500 text-sm">{errors.companyName}</p>
             )}
           </div>
         </div>
@@ -176,88 +179,158 @@ const EmployerSignup = () => {
         </div>
         <div className="mb-6">
           <label
-            htmlFor="email"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Mobile number
-          </label>
-          <div className="relative mt-1">
-            <FaPhone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" />
-            <input
-              id="phone"
-              type="text"
-              placeholder="Enter mobile number"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              className={`block w-full pl-10 py-2 border rounded-lg focus:ring-primary focus:border-primary bg-gray-50 ${
-                errors.phone ? "border-red-500" : "border-gray-300"
-              }`}
-            />
-            {errors.phone && (
-              <p className="text-red-500 text-sm">{errors.phone}</p>
-            )}
-          </div>
-        </div>
-
-        {/* Password Field */}
-        <div className="mb-6">
-          <label
             htmlFor="password"
             className="block text-sm font-medium text-gray-700"
           >
             Password
           </label>
           <div className="relative mt-1">
-            <FaKey className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" />
+            <FaEnvelope className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" />
             <input
               id="password"
-              type={showPassword ? "text" : "password"}
-              placeholder="********"
+              type="password"
+              placeholder="xxxx"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className={`block w-full pl-10 py-2 border rounded-lg focus:ring-primary focus:border-primary bg-gray-50 ${
                 errors.password ? "border-red-500" : "border-gray-300"
               }`}
             />
-            <button
-              type="button"
-              onClick={togglePasswordVisibility}
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 focus:outline-none"
-            >
-              {showPassword ? "🙈" : "👁️"}
-            </button>
             {errors.password && (
               <p className="text-red-500 text-sm">{errors.password}</p>
             )}
           </div>
         </div>
-
-        {/* Confirm Password Field */}
+        {/* Phone Number Field */}
         <div className="mb-6">
           <label
-            htmlFor="confirmPassword"
+            htmlFor="phoneNumber"
             className="block text-sm font-medium text-gray-700"
           >
-            Confirm Password
+            Mobile Number
           </label>
           <div className="relative mt-1">
-            <FaKey className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" />
+            <FaPhone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" />
             <input
-              id="confirmPassword"
-              type={showPassword ? "text" : "password"}
-              placeholder="********"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
+              id="phoneNumber"
+              type="text"
+              placeholder="Enter mobile number"
+              value={phoneNumber}
+              onChange={(e) => setPhoneNumber(e.target.value)}
               className={`block w-full pl-10 py-2 border rounded-lg focus:ring-primary focus:border-primary bg-gray-50 ${
-                errors.confirmPassword ? "border-red-500" : "border-gray-300"
+                errors.phoneNumber ? "border-red-500" : "border-gray-300"
               }`}
             />
-            {errors.confirmPassword && (
-              <p className="text-red-500 text-sm">{errors.confirmPassword}</p>
+            {errors.phoneNumber && (
+              <p className="text-red-500 text-sm">{errors.phoneNumber}</p>
             )}
           </div>
         </div>
 
+        {/* Address Field */}
+        <div className="mb-6">
+          <label
+            htmlFor="address"
+            className="block text-sm font-medium text-gray-700"
+          >
+            Address
+          </label>
+          <div className="relative mt-1">
+            <FaMapMarkerAlt className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" />
+            <input
+              id="address"
+              type="text"
+              placeholder="Company Address"
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
+              className={`block w-full pl-10 py-2 border rounded-lg focus:ring-primary focus:border-primary bg-gray-50 ${
+                errors.address ? "border-red-500" : "border-gray-300"
+              }`}
+            />
+            {errors.address && (
+              <p className="text-red-500 text-sm">{errors.address}</p>
+            )}
+          </div>
+        </div>
+
+        {/* Website Field */}
+        <div className="mb-6">
+          <label
+            htmlFor="website"
+            className="block text-sm font-medium text-gray-700"
+          >
+            Website
+          </label>
+          <div className="relative mt-1">
+            <FaGlobe className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" />
+            <input
+              id="website"
+              type="text"
+              placeholder="https://company.com"
+              value={website}
+              onChange={(e) => setWebsite(e.target.value)}
+              className={`block w-full pl-10 py-2 border rounded-lg focus:ring-primary focus:border-primary bg-gray-50 ${
+                errors.website ? "border-red-500" : "border-gray-300"
+              }`}
+            />
+            {errors.website && (
+              <p className="text-red-500 text-sm">{errors.website}</p>
+            )}
+          </div>
+        </div>
+
+        {/* Industry Field */}
+        <div className="mb-6">
+          <label
+            htmlFor="industry"
+            className="block text-sm font-medium text-gray-700"
+          >
+            Industry
+          </label>
+          <div className="relative mt-1">
+            <FaIndustry className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" />
+            <input
+              id="industry"
+              type="text"
+              placeholder="e.g., Software, Healthcare"
+              value={industry}
+              onChange={(e) => setIndustry(e.target.value)}
+              className={`block w-full pl-10 py-2 border rounded-lg focus:ring-primary focus:border-primary bg-gray-50 ${
+                errors.industry ? "border-red-500" : "border-gray-300"
+              }`}
+            />
+            {errors.industry && (
+              <p className="text-red-500 text-sm">{errors.industry}</p>
+            )}
+          </div>
+        </div>
+
+        {/* Company Size Field */}
+        <div className="mb-6">
+          <label
+            htmlFor="companySize"
+            className="block text-sm font-medium text-gray-700"
+          >
+            Company Size
+          </label>
+          <div className="relative mt-1">
+            <FaBuilding className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" />
+
+            <input
+              id="companySize"
+              type="text"
+              placeholder="e.g., 1-50, 51-200"
+              value={companySize}
+              onChange={(e) => setCompanySize(e.target.value)}
+              className={`block w-full pl-10 py-2 border rounded-lg focus:ring-primary focus:border-primary bg-gray-50 ${
+                errors.companySize ? "border-red-500" : "border-gray-300"
+              }`}
+            />
+            {errors.companySize && (
+              <p className="text-red-500 text-sm">{errors.companySize}</p>
+            )}
+          </div>
+        </div>
         <button
           type="submit"
           className="w-full py-2 bg-primary text-white rounded-lg hover:bg-primary-dark focus:outline-none"

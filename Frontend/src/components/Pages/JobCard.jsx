@@ -1,16 +1,33 @@
-import React, { useEffect } from "react";
-import icon from "../../assets/icon.png";
+import React, { useEffect, useState } from "react";
+import icon from "../../assets/icon.png"; // Default icon
+
 export const JobCard = (props) => {
-  // integrate logo api
-  // GET https://logo.clearbit.com/:domain
-  useEffect(() => {
-    const logo = fetch("https://logo.clearbit.com/microsoft.com");
-  }, []);
+  const [logoUrl, setLogoUrl] = useState(icon); // State for logo
+
+  // useEffect(() => {
+  //   const fetchLogo = async () => {
+  //     try {
+  //       const response = await fetch(
+  //         `https://logo.clearbit.com/${props.companyDomain}`
+  //       );
+  //       if (response.ok) {
+  //         setLogoUrl(response.url); // Update state with logo URL
+  //       }
+  //     } catch (error) {
+  //       console.error("Error fetching logo:", error);
+  //     }
+  //   };
+
+  //   fetchLogo();
+  // }, [props.companyDomain]);
+
   return (
-    <div className="shadow-xl rounded-lg p-4">
+    <div className="shadow-xl rounded-lg p-4" onClick={props.onClick}>
+      {" "}
+      {/* Add onClick here */}
       <div className="header flex flex-row">
         <div className="company-icon">
-          <img src={logo} width={50} alt={props.title} />
+          <img src={icon} width={50} alt={props.title} />
         </div>
         <div className="flex flex-col mx-2">
           <div className="company-name">
@@ -22,14 +39,16 @@ export const JobCard = (props) => {
         </div>
       </div>
       <div className="job-content m-1">
-        <h1 className="font-bold  text-md my-2">{props.title}</h1>
-        <p className="my-2 ">{props.description}</p>
+        <h1 className="font-bold text-md my-2">{props.title}</h1>
+        <p className="my-2">{props.description}</p>
         <div className="tags flex gap-3">
-          <div className="p-1 text-sm rounded bg-gray-100">{props.jobType}</div>
-          <div className="p-1 text-sm rounded  bg-gray-100 ">
-            {props.salary}
+          <div className="p-1 text-sm rounded bg-gray-100">
+            {props.employmentType}
           </div>
-          <div className="p-1 text-sm rounded  bg-gray-100 ">2 Positions</div>
+          <div className="p-1 text-sm rounded bg-gray-100">
+            {props.hourlyRate}
+          </div>
+          <div className="p-1 text-sm rounded bg-gray-100">2 Positions</div>
         </div>
       </div>
       <div className="btns mt-4 flex gap-3 mx-1">

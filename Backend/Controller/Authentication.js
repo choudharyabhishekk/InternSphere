@@ -30,7 +30,6 @@ const signin = async (req, res) => {
 const signup = async (req, res) => {
   const { email, password, firstname, lastname } = req.body;
 
-  console.log(email, "emailllll");
   try {
     const oldUser = await authModel.findOne({ email });
     const hashPassword = await bcrypt.hash(password, 12);
