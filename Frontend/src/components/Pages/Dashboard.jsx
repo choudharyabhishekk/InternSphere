@@ -1,11 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { JobCard } from "./JobCard";
 import { useNavigate } from "react-router-dom";
+import useAuthContext from "../../context/AuthContext";
 
 const Dashboard = () => {
+  const { authState } = useAuthContext();
+  console.log(":--------", authState.isLoggedIn);
   const [jobs, setJobs] = useState([]); // State for job data
   const [loading, setLoading] = useState(true); // Loading state
   const [error, setError] = useState(null); // Error state
+  // authcontext
+
   const navigate = useNavigate();
   // Dummy data
   const dummyJobs = [

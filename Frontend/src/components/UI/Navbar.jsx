@@ -2,19 +2,23 @@ import React, { useState, useEffect } from "react";
 import { NavLink, useNavigate } from "react-router-dom"; // Use NavLink from React Router v6
 import logo from "../../assets/black-logo.png";
 import { FaCircleUser } from "react-icons/fa6";
+import useAuthContext from "../../context/AuthContext";
 
 function Navbar() {
   const navigate = useNavigate();
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const { authState, setAuthState } = useAuthContext();
 
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    setIsLoggedIn(!!token);
-  }, []);
+  const handleProfile = () => {
+    navigate("/profile");
+  };
 
   const handleLogout = () => {
     localStorage.clear();
-    setIsLoggedIn(false);
+    setAuthState({
+      isLoggedIn: false,
+      user: null,
+    });
+
     navigate("/login");
   };
 
@@ -39,7 +43,7 @@ function Navbar() {
           </NavLink>
         </li>
 
-        {isLoggedIn ? (
+        {authState.isLoggedIn ? (
           <>
             <li>
               <NavLink
@@ -54,9 +58,28 @@ function Navbar() {
               </NavLink>
             </li>
             <li>
-              <button onClick={handleLogout}>
-                <FaCircleUser size={30} />
-              </button>
+              <div className="relative inline-block text-left group">
+                <div className="hover:cursor-pointer">
+                  <FaCircleUser size={34} />
+                </div>
+
+                <div className="absolute right-0 mt-2 w-36 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                  <div className="py-1">
+                    <button
+                      onClick={handleProfile}
+                      className="block w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-100"
+                    >
+                      Profile
+                    </button>
+                    <button
+                      onClick={handleLogout}
+                      className="block w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-100"
+                    >
+                      Logout
+                    </button>
+                  </div>
+                </div>
+              </div>
             </li>
           </>
         ) : (

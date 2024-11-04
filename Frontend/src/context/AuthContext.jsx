@@ -1,24 +1,34 @@
-import { createContext, useReducer } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 
-export const AuthContext = createContext();
-export const authReducer = (state, action) => {
-  switch (action.type) {
-    case "LOGIN":
-      return { user: action.payload };
-    case "LOGOUT":
-      return { user: null };
-    default:
-      return state;
-  }
-};
-export const AuthContextProvider = ({ children }) => {
-  const [state, dispath] = useReducer(authReducer, {
+// Creating a context with default values
+const AuthContext = createContext({
+  user: null,
+  isLoggedIn: false,
+});
+
+// Creating provider component
+export function AuthContextProvider({ children }) {
+  // Step 1: Load initial state from localStorage
+  const initialAuthState = JSON.parse(localStorage.getItem("authState")) || {
     user: null,
-  });
-  console.log("AuthContext state: ", state);
+    isLoggedIn: false,
+  };
+
+  const [authState, setAuthState] = useState(initialAuthState);
+
+  // Step 2: Update localStorage whenever authState changes
+  useEffect(() => {
+    localStorage.setItem("authState", JSON.stringify(authState));
+  }, [authState]);
+
   return (
-    <AuthContext.Provider value={{ ...state, dispath }}>
+    <AuthContext.Provider value={{ authState, setAuthState }}>
       {children}
     </AuthContext.Provider>
   );
-};
+}
+
+// Custom hook to use the AuthContext
+export default function useAuthContext() {
+  return useContext(AuthContext);
+}

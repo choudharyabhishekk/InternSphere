@@ -5,7 +5,9 @@ import App from "./App.jsx";
 import { BrowserRouter } from "react-router-dom";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { ToastContainer } from "react-toastify";
-import { AuthContextProvider } from "./context/AuthContext";
+import { AuthContextProvider } from "./context/AuthContext.jsx";
+
+// import { AuthContextProvider } from "./context/AuthContext";
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <AuthContextProvider>

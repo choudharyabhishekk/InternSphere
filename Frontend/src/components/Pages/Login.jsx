@@ -6,15 +6,15 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
+import useAuthContext from "../../context/AuthContext";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState({});
-  // const { setIsLoggedIn } = useContext(AuthContext); // Get setIsLoggedIn from AuthContext
-  const navigate = useNavigate();
 
+  const navigate = useNavigate();
+  const { authState, setAuthState } = useAuthContext();
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
@@ -54,10 +54,12 @@ const Login = () => {
         email,
         password,
       });
-
       const token = response.data.result;
       localStorage.setItem("token", token);
+      setAuthState({ user: { token: token }, isLoggedIn: true });
+
       toast.success("Login Successful");
+
       navigate("/dashboard");
     } catch (error) {
       console.error("Login failed:", error);
@@ -73,7 +75,7 @@ const Login = () => {
   };
 
   return (
-    <div className="flex flex-col justify-center items-center h-screen">
+    <div className="flex flex-col mt-10 items-center h-screen">
       <h1 className="text-2xl font-bold">Login</h1>
 
       <form
@@ -158,7 +160,7 @@ const Login = () => {
           Login
         </button>
         <GoogleLogin
-          className="flex justify-center m-auto w-full py-2 rounded-lg"
+          className="w-full py-2 mb-3 bg-primary text-white rounded-full hover:bg-primary-dark focus:outline-none"
           onSuccess={(credentialResponse) => {
             handleGoogleLogin(credentialResponse);
           }}
