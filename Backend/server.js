@@ -1,7 +1,10 @@
-const express = require("express");
-const cors = require("cors");
-const mongoose = require("mongoose");
-const authRoutes = require("./Routes/Authentication.js")
+import express from "express"
+import cors from "cors"
+import mongoose from "mongoose"
+import authRoutes from "./Routes/Authentication.js"
+import internshipRoutes from "./Routes/Internship.js"
+import employerRoutes from "./Routes/Employer.js"
+
 require("dotenv").config(); 
 
 const app = express();
@@ -13,6 +16,8 @@ const CONNECTION_URL = process.env.CONNECTION_URL;
 const PORT = process.env.PORT || 3000; 
 
 app.use("/auth",authRoutes)
+app.use("/internship",internshipRoutes)
+app.use("/employer",employerRoutes)
 
 mongoose.connect(CONNECTION_URL, {
     useNewUrlParser: true,
