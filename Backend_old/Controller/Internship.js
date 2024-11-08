@@ -1,11 +1,9 @@
+import { Job } from "../models/job.model.js";
 
-const Job = require("../Model/Internship");
-
-
-const postJob = async (req, res) => {
-    const { title, description, requirements, salary, location, jobType, experience, position, companyId } = req.body;
-    const userId = req.id;
+export const postJob = async (req, res) => {
     try {
+        const { title, description, requirements, salary, location, jobType, experience, position, companyId } = req.body;
+        const userId = req.id;
 
         // show error if all the fields in form are not there
         if (!title || !description || !requirements || !salary || !location || !jobType || !experience || !position || !companyId) {
@@ -39,14 +37,12 @@ const postJob = async (req, res) => {
     }
 }
 
- const getAllJobs = async (req, res) => {
+export const getAllJobs = async (req, res) => {
     try {
-        // const keyword = req.query.keyword || "";
+        const keyword = req.query.keyword || "";
         
     } catch (error) {
         console.log(error);
     }
 }
-
-module.exports = {getAllJobs,postJob}
 

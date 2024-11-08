@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose')
 
 const authSchema = mongoose.Schema({
     name:{type:String,required:true},
@@ -12,4 +12,3 @@ const authModel = mongoose.model("authModel",authSchema)
 
 module.exports = authModel;
 
-module.exports = authModel;

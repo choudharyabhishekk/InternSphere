@@ -1,5 +1,6 @@
-const express = require("express");
-const {postJob} = require("../Controller/Internship");
+
+import express from "express"
+import { postJob } from "../Controller/Internship";
 
 const router = express.Router()
 

@@ -1,5 +1,4 @@
-import mongoose from "mongoose";
-
+const mongoose = require('mongoose')
 
 const adminSchema = new mongoose.Schema({
     name: {
@@ -21,8 +20,8 @@ const adminSchema = new mongoose.Schema({
     }
 });
 
-const admin = mongoose.model("adminModel",adminSchema)
+const Admin = mongoose.model("adminModel",adminSchema)
 
-module.exports = admin;
+module.exports = Admin;
 
 

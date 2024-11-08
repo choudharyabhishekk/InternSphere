@@ -99,7 +99,7 @@ const Signup = () => {
   };
 
   return (
-    <div className="flex flex-col justify-center items-center h-screen">
+    <div className="flex flex-col justify-center items-center mt-20">
       <h1 className="text-2xl font-bold ">Create an account</h1>
       <form
         onSubmit={handleSubmit}

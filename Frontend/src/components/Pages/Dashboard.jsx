@@ -133,6 +133,7 @@ const Dashboard = () => {
         {jobs.map((c) => (
           <JobCard
             key={c.id}
+            id={c._id}
             onClick={() => handleJobClick(c._id)}
             company="Microsoft"
             datePosted={c.datePosted}

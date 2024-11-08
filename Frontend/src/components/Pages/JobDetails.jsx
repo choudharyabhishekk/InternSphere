@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const InternshipDetails = () => {
   const { internshipId } = useParams(); // Get internshipId from URL parameters
   const [internship, setInternship] = useState(null); // State to hold internship details
   const [loading, setLoading] = useState(true); // Loading state
-
+  const navigate = useNavigate();
   useEffect(() => {
     // Dummy data for the internship details
     const dummyInternshipData = {
@@ -107,7 +107,10 @@ const InternshipDetails = () => {
       </div>
 
       <div className="btns mt-6 flex gap-3">
-        <button className="border border-gray-300 px-4 py-2 rounded-md bg-primary text-white hover:bg-primary-dark transition">
+        <button
+          onClick={() => navigate(`/apply-now/${internship._id}`)}
+          className="border border-gray-300 px-4 py-2 rounded-md bg-primary text-white hover:bg-primary-dark transition"
+        >
           Apply Now
         </button>
         <button className="px-4 py-2 border border-gray-300 rounded-md bg-gray-100 hover:bg-gray-200 transition">

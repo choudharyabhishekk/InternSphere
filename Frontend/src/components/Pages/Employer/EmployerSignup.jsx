@@ -120,11 +120,11 @@ const EmployerSignup = () => {
   };
 
   return (
-    <div className="flex flex-col mt-20 items-center h-screen">
+    <div className="flex flex-col mt-20 items-center ">
       <h1 className="text-2xl font-bold">Hire a Talent</h1>
       <form
         onSubmit={handleSubmit}
-        className="bg-white p-8 rounded-xl shadow-xl w-full max-w-sm"
+        className="bg-white p-8 rounded-xl shadow-xl w-full max-w-lg"
       >
         {/* Company Name Field */}
         <div className="mb-6">

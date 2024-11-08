@@ -13,6 +13,9 @@ import EmployerDashboard from "./components/Pages/Employer/EmployerDashboard";
 import { CreateJob } from "./components/Pages/Employer/CreateJob";
 import EmployerNavbar from "./components/Pages/Employer/EmployerNavbar";
 import JobDetails from "./components/Pages/JobDetails";
+import AdminDashboard from "./components/Pages/admin/AdminDashboard";
+import ApplyInternship from "./components/Pages/ApplyInternship";
+import InternshipDetails from "./components/Pages/JobDetails";
 
 function App() {
   const location = useLocation();
@@ -32,6 +35,12 @@ function App() {
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/employer/dashboard" element={<EmployerDashboard />} />
+        <Route path="/admin/dashboard" element={<AdminDashboard />} />
+        <Route
+          path="/internship/:internshipId"
+          element={<InternshipDetails />}
+        />
+        <Route path="/apply-now/:internshipId" element={<ApplyInternship />} />
         <Route path="/employer/create" element={<CreateJob />} />
       </Routes>
     </>

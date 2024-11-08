@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import icon from "../../assets/icon.png"; // Default icon
+import { useNavigate } from "react-router-dom";
 
 export const JobCard = (props) => {
   const [logoUrl, setLogoUrl] = useState(icon); // State for logo
-
+  const navigate = useNavigate();
   // useEffect(() => {
   //   const fetchLogo = async () => {
   //     try {
@@ -22,10 +23,9 @@ export const JobCard = (props) => {
   // }, [props.companyDomain]);
 
   return (
-    <div className="shadow-xl rounded-lg p-4" onClick={props.onClick}>
-      {" "}
+    <div className="shadow-xl rounded-lg p-4">
       {/* Add onClick here */}
-      <div className="header flex flex-row">
+      <div className="header flex flex-row" onClick={props.onClick}>
         <div className="company-icon">
           <img src={icon} width={50} alt={props.title} />
         </div>
@@ -38,9 +38,14 @@ export const JobCard = (props) => {
           </div>
         </div>
       </div>
-      <div className="job-content m-1">
+      <div className="job-content m-1" onClick={props.onClick}>
         <h1 className="font-bold text-md my-2">{props.title}</h1>
-        <p className="my-2">{props.description}</p>
+        <p className="my-2">
+          {props.description.split(" ").length > 20
+            ? `${props.description.split(" ").slice(0, 20).join(" ")}...`
+            : props.description}
+        </p>
+
         <div className="tags flex gap-3">
           <div className="p-1 text-sm rounded bg-gray-100">
             {props.employmentType}
@@ -53,7 +58,7 @@ export const JobCard = (props) => {
       </div>
       <div className="btns mt-4 flex gap-3 mx-1">
         <button
-          type="submit"
+          onClick={() => navigate(`/apply-now/${props.id}`)}
           className="border border-gray-300 p-2 px-2 rounded-md text-sm hover:bg-primary hover:text-white"
         >
           Apply Now
