@@ -91,16 +91,15 @@ const ApplyInternship = () => {
 
         <div>
           <label htmlFor="coverLetter" className="block text-md font-semibold">
-            Cover Letter
+            Cover Letter (PDF)
           </label>
-          <textarea
+          <input
+            type="file"
             id="coverLetter"
             name="coverLetter"
-            value={formData.coverLetter}
+            accept="application/pdf"
             onChange={handleChange}
-            required
             className="mt-2 p-2 w-full border border-gray-300 rounded-md"
-            rows="5"
           />
         </div>
 

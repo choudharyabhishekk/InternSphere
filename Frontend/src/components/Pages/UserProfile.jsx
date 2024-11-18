@@ -1,14 +1,21 @@
 import React from "react";
 import { jwtDecode } from "jwt-decode";
 import { FaEnvelope, FaKey, FaUser } from "react-icons/fa";
+import EditProfile from "./EditProfile";
+import { useNavigate } from "react-router-dom";
 
 const UserProfile = () => {
-  // const token = localStorage.getItem("token");
-  // if (!token) {
-  //   throw new Error("User not logged in");
-  // }
-  // const userDetails = jwtDecode(token);
-  // console.log(userDetails);
+  const navigate = useNavigate();
+  const token = localStorage.getItem("token");
+  if (!token) {
+    throw new Error("User not logged in");
+  }
+  const userDetails = jwtDecode(token);
+  console.log(userDetails);
+
+  const handleEditProfile = () => {
+    navigate("/edit");
+  };
   return (
     <div className="flex flex-col justify-center mt-10 items-center">
       <h1 className="text-2xl font-bold my-4">Edit your profile</h1>
@@ -93,6 +100,7 @@ const UserProfile = () => {
         <button
           type="submit"
           className="w-full py-2 bg-primary text-white rounded-lg hover:bg-primary-dark focus:outline-none"
+          onClick={handleEditProfile}
         >
           Edit Profile
         </button>

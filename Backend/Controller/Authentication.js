@@ -18,11 +18,15 @@ const signin = async (req, res) => {
             return res.status(404).json({ message: "user not exists" })
         } else {
             const result = jwt.sign({ email: oldUser.email, id: oldUser._id }, secret, { expiresIn: '1h' })
-            res.status(201).json({ result, message: "Login Successfully." })
+            res.status(201).json({user:oldUser, result , message: "Login Successfully." })
         }
 
     } catch (error) {
         console.log(error);
+        return res.status(500).json({
+            message: "Something went wrong.",
+            success: false
+        });
     }
 }
 
@@ -43,6 +47,10 @@ const signup = async (req, res) => {
         res.status(200).json({ result, token })
     } catch (error) {
         console.log(error);
+        return res.status(500).json({
+            message: "Something went wrong.",
+            success: false
+        });
     }
 }
 

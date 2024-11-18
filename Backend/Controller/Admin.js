@@ -15,6 +15,10 @@ const registeAdminForFirstTime = async (req, res) => {
       });
   } catch (error) {
     console.log(error);
+    return res.status(500).json({
+        message: "Something went wrong.",
+        success: false
+    });
   }
 };
 
@@ -29,16 +33,20 @@ const getAllEmployer = async (req, res) => {
         allEmployer: allEmployer,
       });
   } catch (error) {
-    console.log(error, "error");
+    console.log(error);
+    return res.status(500).json({
+        message: "Something went wrong.",
+        success: false
+    });
   }
 };
 
 const approveEmployer = async (req, res) => {
-  const employerId = req.body.employerId;
+ const employerId =  req.body.employerId;
   try {
     if (employerId) {
       await Employer.findByIdAndUpdate(
-        { employerId },
+        { _id : employerId },
         { Status: "Approve" },
         { new: true }
       );
@@ -49,8 +57,11 @@ const approveEmployer = async (req, res) => {
         .send({ Error: "Please pass employer Id to approve Employer" });
     }
   } catch (error) {
-    console.log(error, "error");
-    res.status(400).send({ Error: error });
+    console.log(error);
+    return res.status(500).json({
+        message: "Something went wrong.",
+        success: false
+    });
   }
 };
 
@@ -59,7 +70,7 @@ const rejectEmployer = async (req, res) => {
   try {
     if (employerId) {
       await Employer.findByIdAndUpdate(
-        { employerId },
+        { _id : employerId },
         { Status: "Reject" },
         { new: true }
       );
@@ -70,8 +81,11 @@ const rejectEmployer = async (req, res) => {
         .send({ Error: "Please pass employer Id to approve Employer" });
     }
   } catch (error) {
-    console.log(error, "error");
-    res.status(400).send({ Error: error });
+    console.log(error);
+        return res.status(500).json({
+            message: "Something went wrong.",
+            success: false
+        });
   }
 };
 

@@ -1,36 +1,44 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
+import { toast } from "react-toastify";
 const AdminDashboard = () => {
   const [employerData, setEmployerData] = useState([]);
+  const fetchEmployers = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:3000/admin/getAllEmployer"
+      );
+      setEmployerData(response.data.allEmployer);
+      console.log(response.data.allEmployer, "><");
+    } catch (error) {
+      console.error("Error fetching employer data:", error);
+    }
+  };
   useEffect(() => {
-    const fetchEmployers = async () => {
-      try {
-        const response = await axios.get(
-          "http://localhost:3000/admin/getAllEmployer"
-        );
-        setEmployerData(response.data.allEmployer);
-        console.log(response.data.allEmployer, "><");
-      } catch (error) {
-        console.error("Error fetching employer data:", error);
-      }
-    };
     fetchEmployers();
   }, []);
   const handleApprove = async (employerId) => {
+    console.log(employerId);
+
     try {
-      const response = await fetch(`/admin/approveEmployer`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: `employerId:${employerId}`,
-      });
+      const response = await fetch(
+        `http://localhost:3000/admin/approveEmployer`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ employerId: employerId }),
+
+          // body: `employerId:${employerId}`,
+        }
+      );
 
       if (response.ok) {
-        alert("Employer approved successfully!");
+        toast.success("Employer approved successfully!");
         // Optionally, update the UI or refresh data
       } else {
-        alert("Failed to approve employer.");
+        toast.error("Failed to approve employer.");
       }
     } catch (error) {
       console.error("Error approving employer:", error);
@@ -40,19 +48,22 @@ const AdminDashboard = () => {
   // Function to handle API call for rejecting an employer
   const handleReject = async (employerId) => {
     try {
-      const response = await fetch(`/admin/rejectEmployer`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: `employerId:${employerId}`,
-      });
+      const response = await fetch(
+        `http://localhost:3000/admin/rejectEmployer`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ employerId }),
+        }
+      );
 
       if (response.ok) {
-        alert("Employer rejected successfully!");
-        // Optionally, update the UI or refresh data
+        toast.success("Employer rejected successfully!");
+        fetchEmployers();
       } else {
-        alert("Failed to reject employer.");
+        toast.error("Failed to reject employer.");
       }
     } catch (error) {
       console.error("Error rejecting employer:", error);
@@ -134,18 +145,22 @@ const AdminDashboard = () => {
                 {employer.createdAt}
               </td>
               <td className="px-4 py-2 border-b text-gray-800">
-                {employer.Status}
+                {employer.Status == "Approve" ? "Approved" : "Rejected"}
               </td>
-              <td className="px-4 py-2 border-b text-center">
-                <button
-                  onClick={() => handleApprove(employer._id)}
-                  className="px-3 py-1 mr-2 bg-green-500 text-white rounded hover:bg-green-600"
-                >
-                  Approve
-                </button>
+              <td className="px-4 py-2  text-center flex ">
+                {employer.Status == "Approve" ? (
+                  <></>
+                ) : (
+                  <button
+                    onClick={() => handleApprove(employer._id)}
+                    className="px-1 py-1 mr-2 bg-green-500 text-white rounded hover:bg-green-600"
+                  >
+                    Approve
+                  </button>
+                )}
                 <button
                   onClick={() => handleReject(employer._id)}
-                  className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600"
+                  className="px-1 py-1 bg-red-500 text-white rounded hover:bg-red-600"
                 >
                   Reject
                 </button>

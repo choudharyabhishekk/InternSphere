@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { FaEnvelope, FaKey, FaUser } from "react-icons/fa";
 import { Routes, Route, Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { toast } from "react-toastify";
+import useAuthContext from "../../context/AuthContext";
 
 const Signup = () => {
   const [name, setName] = useState("");
@@ -12,6 +14,7 @@ const Signup = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
+  const { authState, setAuthState } = useAuthContext();
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -88,9 +91,13 @@ const Signup = () => {
         lastname: name.split(" ")[1] || "",
         email,
         password,
+        userType: "user",
       });
 
-      console.log(response.data);
+      const token = response.data.result;
+      localStorage.setItem("token", token);
+      setAuthState({ user: { token: token }, isLoggedIn: true });
+      toast.success("Login Successful");
       navigate("/dashboard");
     } catch (error) {
       setErrorMessage(error.response?.data?.message || "Signup failed");

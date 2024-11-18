@@ -115,7 +115,7 @@ const EmployerSignup = () => {
       setErrorMessage("");
     } catch (error) {
       setErrorMessage(error.response?.data?.message || "EmployerSignup failed");
-      setSuccessMessage(""); // Clear success message on error
+      // setSuccessMessage(""); // Clear success message on error
     }
   };
 

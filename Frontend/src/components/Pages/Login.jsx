@@ -54,13 +54,23 @@ const Login = () => {
         email,
         password,
       });
+
+      // save token to local storage
       const token = response.data.result;
       localStorage.setItem("token", token);
-      setAuthState({ user: { token: token }, isLoggedIn: true });
-
+      setAuthState({
+        user: { token: token },
+        isLoggedIn: true,
+        userType: response.data.user.userType,
+      });
+      console.log(response.data);
       toast.success("Login Successful");
-
-      navigate("/dashboard");
+      // check user type and redirect
+      if (response.data.user.userType === "employer") {
+        navigate("/employer/dashboard");
+      } else {
+        navigate("/dashboard");
+      }
     } catch (error) {
       console.error("Login failed:", error);
       toast.error("Login Failed. Please Check your credentials.");

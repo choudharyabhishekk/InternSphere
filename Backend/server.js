@@ -21,6 +21,7 @@ app.use("/internship",internshipRoutes)
 app.use("/employer",employerRoutes)
 app.use("/admin",adminRoutes)
 
+
 mongoose.connect(CONNECTION_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,

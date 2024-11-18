@@ -1,16 +1,16 @@
 import { Outlet, Navigate } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, Children } from "react";
+import useAuthContext from "../../context/AuthContext";
 
-function ProtectedRoutes() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  console.log(isLoggedIn);
-  useEffect(() => {
-    // Check if the user is logged in by checking for a token in local storage
-    const userData = localStorage.getItem("token");
-    setIsLoggedIn(true);
-  }, []);
-
-  return isLoggedIn ? <Outlet /> : <Navigate to="/login" />;
-}
+const ProtectedRoutes = ({ children, userType }) => {
+  const { authState } = useAuthContext();
+  if (!authState.isLoggedIn) {
+    return <Navigate to="/login" />;
+  }
+  if (!userType.includes(authState.userType)) {
+    return <Navigate to="/404" />;
+  }
+  return children;
+};
 
 export default ProtectedRoutes;

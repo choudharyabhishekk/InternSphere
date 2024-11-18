@@ -1,48 +1,48 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
-const InternshipDetails = () => {
-  const { internshipId } = useParams(); // Get internshipId from URL parameters
+const JobDetails = () => {
+  const { jobId, title } = useParams();
   const [internship, setInternship] = useState(null); // State to hold internship details
   const [loading, setLoading] = useState(true); // Loading state
+  const [error, setError] = useState(null); // Error state
   const navigate = useNavigate();
+
   useEffect(() => {
-    // Dummy data for the internship details
-    const dummyInternshipData = {
-      id: internshipId,
-      title: "Software Engineering Intern",
-      companyName: "InnovateTech Labs",
-      companyDomain: "innovatetech.com",
-      location: "Remote",
-      datePosted: "2024-10-15",
-      description:
-        "Join our dynamic team as a Software Engineering Intern. You will work alongside our senior developers on exciting projects, gaining hands-on experience in software development.",
-      employmentType: "Internship",
-      duration: "6 months",
-      stipend: "$500/month",
-      skillsRequired: ["JavaScript", "React", "Node.js", "Problem-solving"],
-      responsibilities: [
-        "Collaborate with the development team on new and ongoing projects.",
-        "Assist in debugging and troubleshooting software issues.",
-        "Participate in team meetings and contribute ideas for improving the product.",
-      ],
-      applicationDeadline: "2024-11-30",
+    const fetchJob = async () => {
+      try {
+        // Fetch internship details with jobId in the URL query parameter
+        const response = await fetch(
+          `http://localhost:3000/internship/getJobByID?Id=${jobId}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch job");
+        }
+
+        const data = await response.json();
+        console.log(data.job);
+
+        setInternship(data.job); // Assuming 'job' is the key in the response data
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setLoading(false);
+      }
     };
 
-    // Simulate loading delay
-    setTimeout(() => {
-      setInternship(dummyInternshipData); // Set dummy data
-      setLoading(false); // Set loading to false
-    }, 500); // Simulated delay
-  }, [internshipId]);
+    fetchJob();
+  }, [jobId]);
 
-  if (loading) {
-    return <div>Loading...</div>; // Loading state
-  }
-
-  if (!internship) {
-    return <div>No internship details found.</div>; // If no internship found
-  }
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
+  if (!internship) return <div>No internship details found.</div>;
 
   return (
     <div className="max-w-6xl m-auto my-5 p-6 border rounded-md shadow-lg">
@@ -66,7 +66,7 @@ const InternshipDetails = () => {
         <h2 className="text-lg font-semibold">Internship Description:</h2>
         <p className="mt-2">{internship.description}</p>
       </div>
-
+      {/* 
       <div className="mt-4">
         <h2 className="text-lg font-semibold">Responsibilities:</h2>
         <ul className="list-disc list-inside mt-2 text-gray-700">
@@ -74,7 +74,7 @@ const InternshipDetails = () => {
             <li key={index}>{task}</li>
           ))}
         </ul>
-      </div>
+      </div> */}
 
       <div className="details mt-4 flex flex-wrap gap-3">
         <div className="p-2 text-sm rounded bg-gray-100">
@@ -84,15 +84,11 @@ const InternshipDetails = () => {
           <strong>Duration:</strong> {internship.duration}
         </div>
         <div className="p-2 text-sm rounded bg-gray-100">
-          <strong>Stipend:</strong> {internship.stipend}
-        </div>
-        <div className="p-2 text-sm rounded bg-gray-100">
-          <strong>Application Deadline:</strong>{" "}
-          {internship.applicationDeadline}
+          <strong>Stipend:</strong> {internship.hourlyRate} per hour
         </div>
       </div>
 
-      <div className="skills mt-4">
+      {/* <div className="skills mt-4">
         <h2 className="text-lg font-semibold">Skills Required:</h2>
         <div className="flex gap-2 flex-wrap mt-2">
           {internship.skillsRequired.map((skill, index) => (
@@ -104,7 +100,7 @@ const InternshipDetails = () => {
             </span>
           ))}
         </div>
-      </div>
+      </div> */}
 
       <div className="btns mt-6 flex gap-3">
         <button
@@ -121,4 +117,4 @@ const InternshipDetails = () => {
   );
 };
 
-export default InternshipDetails;
+export default JobDetails;

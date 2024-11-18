@@ -16,6 +16,10 @@ import JobDetails from "./components/Pages/JobDetails";
 import AdminDashboard from "./components/Pages/admin/AdminDashboard";
 import ApplyInternship from "./components/Pages/ApplyInternship";
 import InternshipDetails from "./components/Pages/JobDetails";
+import ProtectedRoutes from "./components/utils/ProtectedRoutes";
+import NotFound from "./components/Pages/NotFound";
+import PublicRoutes from "./components/utils/PublicRoutes";
+import EditProfile from "./components/Pages/EditProfile";
 
 function App() {
   const location = useLocation();
@@ -27,21 +31,83 @@ function App() {
     <>
       {isEmployerRoute ? <EmployerNavbar /> : <Navbar />}
       <Routes>
-        <Route path="/job/:jobId" element={<JobDetails />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/hire" element={<EmployerSignup />} />
-        <Route path="/profile" element={<UserProfile />} />
-        <Route path="/login" element={<Login />} />
+        <Route path="/job/:title/:jobId" element={<JobDetails />} />
+        <Route
+          path="/signup"
+          element={
+            <PublicRoutes>
+              <Signup />
+            </PublicRoutes>
+          }
+        />
+        <Route
+          path="/hire"
+          element={
+            <PublicRoutes>
+              <EmployerSignup />
+            </PublicRoutes>
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoutes userType={["user"]}>
+              <UserProfile />
+            </ProtectedRoutes>
+          }
+        />
+
+        <Route path="/edit" element={<EditProfile />} />
+        <Route
+          path="/login"
+          element={
+            <PublicRoutes>
+              <Login />
+            </PublicRoutes>
+          }
+        />
+        <Route path="/404" element={<NotFound />} />
+
         <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/employer/dashboard" element={<EmployerDashboard />} />
-        <Route path="/admin/dashboard" element={<AdminDashboard />} />
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoutes userType={["user"]}>
+              <Dashboard />
+            </ProtectedRoutes>
+          }
+        />
+        <Route path="/" element={<Homepage />} />
+
+        <Route
+          path="/employer/dashboard"
+          element={
+            <ProtectedRoutes userType={["employer"]}>
+              <EmployerDashboard />
+            </ProtectedRoutes>
+          }
+        />
+        <Route
+          path="/admin/dashboard"
+          element={
+            <ProtectedRoutes userType={["admin"]}>
+              <AdminDashboard />
+            </ProtectedRoutes>
+          }
+        />
         <Route
           path="/internship/:internshipId"
           element={<InternshipDetails />}
         />
         <Route path="/apply-now/:internshipId" element={<ApplyInternship />} />
-        <Route path="/employer/create" element={<CreateJob />} />
+        <Route
+          path="/employer/create"
+          element={
+            <ProtectedRoutes userType={["employer"]}>
+              <CreateJob />
+            </ProtectedRoutes>
+          }
+        />
       </Routes>
     </>
   );

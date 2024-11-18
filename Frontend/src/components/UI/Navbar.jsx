@@ -58,9 +58,9 @@ function Navbar() {
               </NavLink>
             </li>
             <li>
-              <div className="relative inline-block text-left group">
+              <div className="relative inline-block text-left group my-2">
                 <div className="hover:cursor-pointer">
-                  <FaCircleUser size={34} />
+                  <FaCircleUser size={32} />
                 </div>
 
                 <div className="absolute right-0 mt-2 w-36 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 opacity-0 group-hover:opacity-100 transition-opacity duration-200">

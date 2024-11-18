@@ -4,6 +4,7 @@ import { createContext, useContext, useState, useEffect } from "react";
 const AuthContext = createContext({
   user: null,
   isLoggedIn: false,
+  userType: null,
 });
 
 // Creating provider component
@@ -12,6 +13,7 @@ export function AuthContextProvider({ children }) {
   const initialAuthState = JSON.parse(localStorage.getItem("authState")) || {
     user: null,
     isLoggedIn: false,
+    userType: null,
   };
 
   const [authState, setAuthState] = useState(initialAuthState);

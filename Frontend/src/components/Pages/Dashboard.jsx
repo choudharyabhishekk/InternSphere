@@ -5,88 +5,26 @@ import useAuthContext from "../../context/AuthContext";
 
 const Dashboard = () => {
   const { authState } = useAuthContext();
-  console.log(":--------", authState.isLoggedIn);
   const [jobs, setJobs] = useState([]); // State for job data
   const [loading, setLoading] = useState(true); // Loading state
   const [error, setError] = useState(null); // Error state
   // authcontext
 
   const navigate = useNavigate();
-  // Dummy data
-  const dummyJobs = [
-    {
-      id: 1,
-      title: "Software Developer Intern",
-      description: "Work on full-stack development.",
-      location: "New York",
-      companyName: "Tech Corp",
-      datePosted: "2024-09-30",
-      hourlyRate: "$20/hour",
-      employmentType: "Full-time",
-    },
-    {
-      id: 2,
-      title: "Data Analyst Intern",
-      description: "Assist in data analysis and reporting.",
-      location: "San Francisco",
-      companyName: "Data Insights",
-      datePosted: "2024-09-28",
-      hourlyRate: "$22/hour",
-      employmentType: "Part-time",
-    },
-    {
-      id: 3,
-      title: "UX/UI Designer Intern",
-      description: "Design user-friendly interfaces.",
-      location: "Remote",
-      companyName: "Design Studio",
-      datePosted: "2024-09-25",
-      hourlyRate: "$18/hour",
-      employmentType: "Full-time",
-    },
-    {
-      id: 4,
-      title: "Marketing Intern",
-      description: "Support digital marketing campaigns.",
-      location: "Toronto",
-      companyName: "Market Masters",
-      datePosted: "2024-09-29",
-      hourlyRate: "$19/hour",
-      employmentType: "Part-time",
-    },
-    {
-      id: 5,
-      title: "Finance Intern",
-      description: "Assist with financial reporting.",
-      location: "Chicago",
-      companyName: "FinTech Solutions",
-      datePosted: "2024-09-27",
-      hourlyRate: "$21/hour",
-      employmentType: "Full-time",
-    },
-    {
-      id: 6,
-      title: "HR Intern",
-      description: "Assist with recruitment and onboarding.",
-      location: "Remote",
-      companyName: "People First",
-      datePosted: "2024-09-26",
-      hourlyRate: "$17/hour",
-      employmentType: "Part-time",
-    },
-  ];
 
   useEffect(() => {
     const fetchJobs = async () => {
       try {
-        const response = await fetch("http://localhost:3000/jobs");
+        const response = await fetch(
+          "http://localhost:3000/internship/getAllJobs"
+        );
         if (!response.ok) {
-          throw new Error("Failed to fetch jobs");
+          throw new Error("No Jobs Found");
         }
         const data = await response.json();
-        console.log(data);
+
         // Update jobs state with fetched data or fallback to dummy data
-        setJobs(data.length > 0 ? data : dummyJobs);
+        setJobs(data.jobs.length > 0 ? data.jobs : null);
       } catch (error) {
         setError(error.message);
         // Fallback to dummy data if there is an error
@@ -114,8 +52,9 @@ const Dashboard = () => {
   if (error) {
     return <div>Error: {error}</div>; // Error state
   }
-  const handleJobClick = (jobId) => {
-    navigate(`/job/${jobId}`); // Navigate to job details page
+  const handleJobClick = (jobId, title) => {
+    const friendlyURL = title.split(" ").join("-").toLowerCase();
+    navigate(`/job/${friendlyURL}/${jobId}`);
   };
   return (
     <div className="max-w-6xl m-auto my-5">
@@ -132,9 +71,10 @@ const Dashboard = () => {
       <div className="job-list grid gap-10 md:grid-cols-3 sm:grid-cols-2">
         {jobs.map((c) => (
           <JobCard
-            key={c.id}
+            key={c._id}
             id={c._id}
-            onClick={() => handleJobClick(c._id)}
+            onClick={() => handleJobClick(c._id, c.title)}
+            companyDomain={c.website}
             company="Microsoft"
             datePosted={c.datePosted}
             title={c.title}

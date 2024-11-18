@@ -5,29 +5,30 @@ import { useNavigate } from "react-router-dom";
 export const JobCard = (props) => {
   const [logoUrl, setLogoUrl] = useState(icon); // State for logo
   const navigate = useNavigate();
-  // useEffect(() => {
-  //   const fetchLogo = async () => {
-  //     try {
-  //       const response = await fetch(
-  //         `https://logo.clearbit.com/${props.companyDomain}`
-  //       );
-  //       if (response.ok) {
-  //         setLogoUrl(response.url); // Update state with logo URL
-  //       }
-  //     } catch (error) {
-  //       console.error("Error fetching logo:", error);
-  //     }
-  //   };
-
-  //   fetchLogo();
-  // }, [props.companyDomain]);
+  useEffect(() => {
+    const fetchLogo = async () => {
+      if (props.companyDomain) {
+        try {
+          const response = await fetch(
+            `https://logo.clearbit.com/${props.companyDomain}`
+          );
+          if (response.ok) {
+            setLogoUrl(response.url);
+          }
+        } catch (error) {
+          console.error("Error fetching logo:", error);
+        }
+      }
+    };
+    fetchLogo();
+  }, [props.companyDomain]);
 
   return (
     <div className="shadow-xl rounded-lg p-4">
       {/* Add onClick here */}
       <div className="header flex flex-row" onClick={props.onClick}>
         <div className="company-icon">
-          <img src={icon} width={50} alt={props.title} />
+          <img src={logoUrl} width={50} alt={props.title} />
         </div>
         <div className="flex flex-col mx-2">
           <div className="company-name">
@@ -38,11 +39,11 @@ export const JobCard = (props) => {
           </div>
         </div>
       </div>
-      <div className="job-content m-1" onClick={props.onClick}>
+      <div className="job-content m-1 cursor-pointer" onClick={props.onClick}>
         <h1 className="font-bold text-md my-2">{props.title}</h1>
         <p className="my-2">
           {props.description.split(" ").length > 20
-            ? `${props.description.split(" ").slice(0, 20).join(" ")}...`
+            ? `${props.description.split(" ").slice(0, 17).join(" ")}...`
             : props.description}
         </p>
 
